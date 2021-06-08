@@ -15,13 +15,16 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.x12.Element;
+import com.imsweb.x12.LineBreak;
 import com.imsweb.x12.Loop;
 import com.imsweb.x12.mapping.TransactionDefinition;
 import com.imsweb.x12.reader.X12Reader.FileType;
+import com.imsweb.x12.writer.X12Writer;
 
 public class X12ReaderTest {
 
@@ -1548,5 +1551,37 @@ public class X12ReaderTest {
         Assert.assertEquals("2420A", loops.get(0).findLoop("2420A").get(0).getElement("PRV", "PRV03"));
         Assert.assertTrue(loops.get(0).findLoop("2330D").isEmpty());
         Assert.assertTrue(loops.get(0).findLoop("2310B").isEmpty());
+    }
+
+
+    @Test
+    public void test271_5010_1() throws Exception {
+        URL url = this.getClass().getResource("/271_5010/example_271_5010-1.txt");
+        File x12File = new File(url.getFile());
+        String x12Text = FileUtils.readFileToString(x12File, StandardCharsets.UTF_8);
+        X12Reader reader = new X12Reader(FileType.ANSI271_5010_X279, x12File);
+
+        List<Loop> loops = reader.getLoops();
+        Assert.assertEquals("No loops parsed. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), 1, loops.size());
+
+        Assert.assertEquals(x12Text.trim(), new X12Writer(reader).toX12String(LineBreak.CRLF).trim());
+
+        Assert.assertTrue("Found errors. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), reader.getFatalErrors().isEmpty() && reader.getErrors().isEmpty());
+    }
+
+    @Test
+    public void test271_5010_2() throws Exception {
+        URL url = this.getClass().getResource("/271_5010/example_271_5010-2.txt");
+        File x12File = new File(url.getFile());
+        String x12Text = FileUtils.readFileToString(x12File, StandardCharsets.UTF_8);
+        X12Reader reader = new X12Reader(FileType.ANSI271_5010_X279, x12File);
+
+        List<Loop> loops = reader.getLoops();
+        Assert.assertEquals("No loops parsed. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), 1, loops.size());
+
+        Assert.assertEquals(x12Text.trim(), new X12Writer(reader).toX12String(LineBreak.CRLF).trim());
+
+        Assert.assertTrue("Found errors. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), reader.getFatalErrors().isEmpty() && reader.getErrors().isEmpty());
+
     }
 }
