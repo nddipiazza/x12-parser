@@ -1553,7 +1553,6 @@ public class X12ReaderTest {
         Assert.assertTrue(loops.get(0).findLoop("2310B").isEmpty());
     }
 
-
     @Test
     public void test271_5010() throws Exception {
         URL url = this.getClass().getResource("/271_5010/example_271_5010.txt");
