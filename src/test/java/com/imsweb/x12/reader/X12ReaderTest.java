@@ -1555,8 +1555,8 @@ public class X12ReaderTest {
 
 
     @Test
-    public void test271_5010_1() throws Exception {
-        URL url = this.getClass().getResource("/271_5010/example_271_5010-1.txt");
+    public void test271_5010() throws Exception {
+        URL url = this.getClass().getResource("/271_5010/example_271_5010.txt");
         File x12File = new File(url.getFile());
         String x12Text = FileUtils.readFileToString(x12File, StandardCharsets.UTF_8);
         X12Reader reader = new X12Reader(FileType.ANSI271_5010_X279, x12File);
@@ -1567,21 +1567,5 @@ public class X12ReaderTest {
         Assert.assertEquals(x12Text.trim(), new X12Writer(reader).toX12String(LineBreak.CRLF).trim());
 
         Assert.assertTrue("Found errors. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), reader.getFatalErrors().isEmpty() && reader.getErrors().isEmpty());
-    }
-
-    @Test
-    public void test271_5010_2() throws Exception {
-        URL url = this.getClass().getResource("/271_5010/example_271_5010-2.txt");
-        File x12File = new File(url.getFile());
-        String x12Text = FileUtils.readFileToString(x12File, StandardCharsets.UTF_8);
-        X12Reader reader = new X12Reader(FileType.ANSI271_5010_X279, x12File);
-
-        List<Loop> loops = reader.getLoops();
-        Assert.assertEquals("No loops parsed. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), 1, loops.size());
-
-        Assert.assertEquals(x12Text.trim(), new X12Writer(reader).toX12String(LineBreak.CRLF).trim());
-
-        Assert.assertTrue("Found errors. Fatal errors: " + reader.getFatalErrors() + ", errors: " + reader.getErrors(), reader.getFatalErrors().isEmpty() && reader.getErrors().isEmpty());
-
     }
 }
